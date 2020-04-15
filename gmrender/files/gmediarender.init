@@ -9,7 +9,7 @@ START=99
 STOP=01
 
 # Read the hostname
-HOSTNAME=uci get system.@system[0].hostname
+HOSTNAME=$(uci get system.@system[0].hostname)
 
 # Option for initial volume - avoid volume with 100%
 VOLUME=--gstout-initial-volume-db="-20" 
