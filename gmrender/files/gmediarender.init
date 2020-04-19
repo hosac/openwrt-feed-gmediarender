@@ -11,6 +11,9 @@ STOP=01
 # Read the hostname
 HOSTNAME=$(uci get system.@system[0].hostname)
 
+# Generate UUID from MAC
+UUID=$(ip link show | awk '/ether/ {print "salt:)-" $2}' | head -1 | md5sum | awk '{print $1}')
+
 # Option for initial volume - avoid volume with 100%
 VOLUME=--gstout-initial-volume-db="-20" 
 
@@ -23,8 +26,8 @@ start_service() {
     echo "Starting gmediarender..."
     procd_open_instance
 
-    # Start the application including hostname option and defined volume
-    procd_set_param command /usr/bin/gmediarender -f "$HOSTNAME" "$VOLUME"
+    # Start the application including hostname, uuid and defined volume
+    procd_set_param command /usr/bin/gmediarender -f "$HOSTNAME" -u "$UUID" "$VOLUME"
 
     # procd_set_param stdout 1
     # procd_set_param stderr 1
